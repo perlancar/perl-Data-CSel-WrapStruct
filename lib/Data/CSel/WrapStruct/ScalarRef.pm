@@ -22,3 +22,5 @@ sub children {
 
 1;
 # ABSTRACT: Wrap a scalar ref
+
+=for Pod::Coverage .*

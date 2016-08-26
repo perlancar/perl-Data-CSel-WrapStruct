@@ -29,3 +29,5 @@ sub length {
 
 1;
 # ABSTRACT: Wrap an array ref
+
+=for Pod::Coverage .*

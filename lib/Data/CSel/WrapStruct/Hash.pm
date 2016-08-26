@@ -37,6 +37,8 @@ sub length {
 1;
 # ABSTRACT: Wrap a hashref
 
+=for Pod::Coverage .*
+
 =head1 DESCRIPTION
 
 Some notes:
