@@ -1,8 +1,15 @@
 Revision history for Data-CSel-WrapStruct
 
+0.003   2016-09-10 (PERLANCAR) (unreleased)
+
+        - [Incompatible change] Rename Hash method pair_value() to the shorter
+          and more easily remembered key().
+
+
 0.002   2016-09-01 (PERLANCAR)
 
-	- Hash: add methods has_key(), pair_value().
+	- Hash: add methods has_key(), pair_value(). UPDATE: pair_value() was
+          renamed to in 0.003.
 
 
 0.001    2016-08-26 (PERLANCAR)

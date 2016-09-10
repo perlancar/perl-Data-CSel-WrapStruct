@@ -38,7 +38,7 @@ sub has_key {
     exists $_[0][0]{$_[1]};
 }
 
-sub pair_value {
+sub key {
     $_[0][0]{$_[1]};
 }
 
@@ -76,9 +76,9 @@ Return true if hash has a key with value of C<$key>. Equivalent to:
 
  exists($hash->{$key})
 
-=head2 pair_value($key) => any
+=head2 key($key) => any
 
-Retrieve a hash pair value. Equivalent to:
+Retrieve the value of a hash key. Equivalent to:
 
  $hash->{$key}
 
