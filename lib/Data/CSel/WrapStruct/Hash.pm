@@ -5,7 +5,7 @@ package Data::CSel::WrapStruct::Hash;
 
 sub new {
     my ($class, $data, $parent) = @_;
-    bless [$data, $parent]; # $keys, $children
+    bless [$data, $parent], $class;
 }
 
 sub value {

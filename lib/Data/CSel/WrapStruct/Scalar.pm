@@ -5,7 +5,7 @@ package Data::CSel::WrapStruct::Scalar;
 
 sub new {
     my ($class, $data_ref, $parent) = @_;
-    bless [$data_ref, $parent];
+    bless [$data_ref, $parent], $class;
 }
 
 sub value {

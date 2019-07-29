@@ -37,7 +37,7 @@ sub _wrap {
     } elsif ($ref eq 'SCALAR') {
         return Data::CSel::WrapStruct::ScalarRef->new($data, $parent);
     } elsif ($ref eq 'JSON::PP::Boolean') {
-        return Data::CSel::WrapStruct::ScalarRef->new($$data, $parent);
+        return Data::CSel::WrapStruct::Scalar->new($$data, $parent);
     } else {
         die "Sorry, currently can't handle ref=$ref";
     }
