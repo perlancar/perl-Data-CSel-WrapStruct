@@ -6,7 +6,7 @@
 	  remembered key().
 
 
-0.003   2016-09-10 (PERLANCAR)  Released-By: unreleased
+0.003   2016-09-10  Released-By: PERLANCAR; Released: no
 
         - [Incompatible change] Rename Hash method pair_value() to the shorter
           and more easily remembered key().
@@ -21,3 +21,4 @@
 0.001    2016-08-26  Released-By: PERLANCAR
 
          - First release.
+
