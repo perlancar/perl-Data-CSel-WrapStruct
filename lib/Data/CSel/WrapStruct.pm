@@ -173,7 +173,7 @@ sub has_key {
     exists $_[0][0]{$_[1]};
 }
 
-sub key_value {
+sub key {
     $_[0][0]{$_[1]};
 }
 
@@ -347,16 +347,16 @@ Check whether hash has a certain key. Can be used to select a hash, e.g.:
 
  @nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, 'Hash[has_key("foo")]');
 
-=head2 key_value
+=head2 key
 
 Usage:
 
- my $key_val = $node->key_value("foo");
+ my $key_val = $node->key("foo");
 
 Get a hash key's value. Can be used to select a hash based on the value of one
 of its keys, e.g.:
 
- @nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, 'Hash[key_value("name") = "lisa"]');
+ @nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, 'Hash[key("name") = "lisa"]');
 
 
 =head1 FAQ
