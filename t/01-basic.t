@@ -8,15 +8,20 @@ use Test::More 0.98;
 use Data::CSel qw(csel);
 use Data::CSel::WrapStruct qw(wrap_struct unwrap_tree);
 
-my $data = [
-    0,
-    1,
-    [2, ["two","dua"], {url=>"http://example.com/two.jpg"}, ["even","prime"]],
-    3,
-    [4, ["four","empat"], {}, ["even"]],
-];
-my $tree = wrap_struct($data);
+my $data;
+my $tree;
+sub set_data {
+    $data = [
+        0,
+        1,
+        [2, ["two","dua"], {url=>"http://example.com/two.jpg"}, ["even","prime"]],
+        3,
+        [4, ["four","empat"], {}, ["even"]],
+    ];
+    $tree = wrap_struct($data);
+}
 
+set_data;
 test_csel(
     expr   => "Hash",
     opts   => {class_prefixes=>['Data::CSel::WrapStruct']},
@@ -60,6 +65,33 @@ test_csel(
         [2, ["two","dua"], {url=>"http://example.com/two.jpg"}, ["GENAP","prime"]],
         3,
         [4, ["four","empat"], {}, ["GENAP"]],
+    ],
+);
+
+# XXX modify value of array
+
+# XXX modify value of hash
+
+set_data;
+test_csel(
+    name   => "remove scalar from array",
+    expr   => 'Scalar[value="even"]',
+    opts   => {class_prefixes=>['Data::CSel::WrapStruct']},
+    tree   => $tree,
+    after_csel => sub {
+        my ($res_nodes) = @_;
+        for (@{$res_nodes}) {
+            $_->remove;
+        }
+    },
+
+    result_unwrapped_nodes => ["even", "even"],
+    result_struct => [
+        0,
+        1,
+        [2, ["two","dua"], {url=>"http://example.com/two.jpg"}, ["prime"]],
+        3,
+        [4, ["four","empat"], {}, []],
     ],
 );
 

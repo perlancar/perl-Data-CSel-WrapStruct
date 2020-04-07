@@ -92,6 +92,22 @@ sub value {
     $self->[0];
 }
 
+sub remove {
+    my $self = shift;
+    my ($parent, $key_in_parent) = ($self->[1], $self->[2]);
+    if (defined $parent && defined $key_in_parent) {
+        my $ref_parent = ref $parent->[0];
+        if ($ref_parent eq 'ARRAY') {
+            splice @{ $parent->[0] }, $key_in_parent, 1;
+        } elsif ($ref_parent eq 'HASH') {
+            delete $parent->[0]{$key_in_parent};
+        } else {
+            warn "Cannot remove node from parent: not array/hash";
+        }
+    }
+    undef;
+}
+
 sub parent {
     $_[0][1];
 }
@@ -275,6 +291,14 @@ Note that when setting node value, the new node value is not automatically
 wrapped for you. If you want to set new node value and expect to select it or
 part of it again with C<csel()>, you will have to wrap the new value first with
 L</wrap_struct>.
+
+=head2 remove
+
+Usage:
+
+ $node->remove;
+
+Remove node from parent.
 
 
 =head1 SCALAR NODE METHODS
