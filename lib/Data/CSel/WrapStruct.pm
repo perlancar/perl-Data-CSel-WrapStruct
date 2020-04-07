@@ -15,6 +15,11 @@ our @EXPORT_OK = qw(
                        unwrap_tree
                );
 
+# convenience
+use Data::CSel ();
+unshift @Data::CSel::CLASS_PREFIXES, __PACKAGE__
+    unless grep { $_ eq __PACKAGE__ } @Data::CSel::CLASS_PREFIXES;
+
 sub _wrap {
     my ($data, $parent, $key_in_parent) = @_;
     my $ref = ref($data);
@@ -202,22 +207,23 @@ sub key {
 Scalars are wrapped using C<Data::CSel::WrapStruct::Scalar> class, scalarrefs
 are wrapped using C<Data::CSel::WrapStruct::ScalarRef> class, arrays are wrapped
 using C<Data::CSel::WrapStruct::Array> class, and hashes are wrapped using
-C<Data::CSel::WrapStruct::Hash> class. If you are using type selectors, you
-probably want to add C<Data::CSel::WrapStruct> into C<class_prefixes> for
-convenience:
+C<Data::CSel::WrapStruct::Hash> class. For convenience, when you load
+C<Data::CSel::WrapStruct>, it adds C<Data::CSel::WrapStruct> to
+C<@Data::CSel::CLASS_PREFIXES> so you don't have to specify C<<
+{class_prefixes=>["Data::CSel::WrapStruct"]} >> C<csel()> option everytime.
 
- my @hashes = map {$_->value} csel({class_prefixes=>["Data::CSel::WrapStruct"]}, "Hash", $tree);
+ my @hashes = map {$_->value} csel("Hash", $tree);
  # -> ({url=>"http://example.com/two.jpg"}, {})
 
 The wrapper objects provide some methods, e.g.:
 
- my @empty_hashes = map {$_->value} csel({class_prefixes=>["Data::CSel::WrapStruct"]}, "Hash[length=0]", $tree);
+ my @empty_hashes = map {$_->value} csel("Hash[length=0]", $tree);
  # -> ({})
 
- my @hashes_that_have_url_key = map {$_->value} csel({class_prefixes=>["Data::CSel::WrapStruct"]}, "Hash[has_key('url')]", $tree);
+ my @hashes_that_have_url_key = map {$_->value} csel("Hash[has_key('url')]", $tree);
  # -> ({url=>"http://example.com/two.jpg"})
 
- my @larger_scalars = [map {$_->value} csel({class_prefixes=>["Data::CSel::WrapStruct"]}, "Scalar[value >= 3]", $tree)]
+ my @larger_scalars = [map {$_->value} csel("Scalar[value >= 3]", $tree)]
  # -> (3, 4)
 
 See L</NODE METHODS>, L</SCALAR NODE METHODS>, L</SCALARREF NODE METHODS>,
@@ -226,7 +232,7 @@ methods.
 
 You can replace the value of nodes using L</value>:
 
- my @posint_scalar_nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, "Scalar[value > 0]", $tree);
+ my @posint_scalar_nodes = csel("Scalar[value > 0]", $tree);
  for (@posint_scalar_nodes) { $_->value( $_->value * 10 ) }
  use Data::Dump;
  dd unwrap_tree($data);
@@ -322,7 +328,7 @@ following methods.
 
 Get array length. Can be used to select an array based on its length, e.g.:
 
- @nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, 'Array[length > 0]');
+ @nodes = csel('Array[length > 0]');
 
 
 =head1 HASH NODE METHODS
@@ -335,7 +341,7 @@ following methods.
 Get the number of keys. Can be used to select a hash based on its number of
 keys, e.g.:
 
- @nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, 'Hash[length > 0]');
+ @nodes = csel('Hash[length > 0]');
 
 =head2 has_key
 
@@ -345,7 +351,7 @@ Usage:
 
 Check whether hash has a certain key. Can be used to select a hash, e.g.:
 
- @nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, 'Hash[has_key("foo")]');
+ @nodes = csel('Hash[has_key("foo")]');
 
 =head2 key
 
@@ -356,7 +362,7 @@ Usage:
 Get a hash key's value. Can be used to select a hash based on the value of one
 of its keys, e.g.:
 
- @nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, 'Hash[key("name") = "lisa"]');
+ @nodes = csel('Hash[key("name") = "lisa"]');
 
 
 =head1 FAQ
@@ -364,7 +370,7 @@ of its keys, e.g.:
 =head2 Changing the node value doesn't work!
 
  my $data = [0, 1, 2];
- my @nodes = csel({class_prefixes=>["Data::CSel::WrapStruct"]}, "Scalar[value > 0]", wrap_struct($data));
+ my @nodes = csel("Scalar[value > 0]", wrap_struct($data));
  for (@nodes) { $_->[0] = "x" }
  use Data::Dump;
  dd $data;

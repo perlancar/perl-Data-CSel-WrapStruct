@@ -24,7 +24,7 @@ sub set_data {
 set_data;
 test_csel(
     expr   => "Hash",
-    opts   => {class_prefixes=>['Data::CSel::WrapStruct']},
+    opts   => {},
     tree   => $tree,
 
     result_unwrapped_nodes => [{url=>"http://example.com/two.jpg"}, {}],
@@ -32,7 +32,7 @@ test_csel(
 
 test_csel(
     expr   => "Hash[length=0]",
-    opts   => {class_prefixes=>['Data::CSel::WrapStruct']},
+    opts   => {},
     tree   => $tree,
 
     result_unwrapped_nodes => [{}],
@@ -40,7 +40,7 @@ test_csel(
 
 test_csel(
     expr   => "Hash[length>0]",
-    opts   => {class_prefixes=>['Data::CSel::WrapStruct']},
+    opts   => {},
     tree   => $tree,
 
     result_unwrapped_nodes => [{url=>"http://example.com/two.jpg"}],
@@ -49,7 +49,7 @@ test_csel(
 test_csel(
     name   => "modify value of scalar",
     expr   => 'Scalar[value="even"]',
-    opts   => {class_prefixes=>['Data::CSel::WrapStruct']},
+    opts   => {},
     tree   => $tree,
     after_csel => sub {
         my ($res_nodes) = @_;
@@ -76,7 +76,7 @@ set_data;
 test_csel(
     name   => "remove scalar from array",
     expr   => 'Scalar[value="even"]',
-    opts   => {class_prefixes=>['Data::CSel::WrapStruct']},
+    opts   => {},
     tree   => $tree,
     after_csel => sub {
         my ($res_nodes) = @_;
@@ -94,6 +94,10 @@ test_csel(
         [4, ["four","empat"], {}, []],
     ],
 );
+
+# XXX remove scalar from hash
+# XXX remove array from array, hash
+# XXX remove hash from array, hash
 
 DONE_TESTING:
 done_testing;
