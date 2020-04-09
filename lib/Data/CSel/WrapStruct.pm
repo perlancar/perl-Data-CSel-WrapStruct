@@ -104,6 +104,10 @@ sub remove {
         my $ref_parent = ref $parent->[0];
         if ($ref_parent eq 'ARRAY') {
             splice @{ $parent->[0] }, $key_in_parent, 1;
+            # shift larger indexes by 1
+            for my $chld (@{ $parent->children }) {
+                $chld->[2]-- if $chld->[2] >= $key_in_parent;
+            }
         } elsif ($ref_parent eq 'HASH') {
             delete $parent->[0]{$key_in_parent};
         } else {
