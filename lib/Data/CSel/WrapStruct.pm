@@ -389,6 +389,24 @@ To set node value, you have to use the C<value()> node method with an argument:
 
 will then print the expected C<< [0,'x','x'] >>.
 
+=head2 This module is slow!
+
+If you intend to select a data structure with thousands of nodes or more, you're
+probably better off using other approach, for example L<Data::Walk::More>.
+Data::Walk::More provides containers for the nodes you're traversing. For
+example, the CSel expression C<< Hash[has_keys("foo")] > Array > Scalar[value >
+0] >> can be written as:
+
+ walk sub {
+     my $ref = ref $_;
+     return if ref $_; # ... Scalar
+     return if $_ <= 0; # ... [value > 0]
+     return unless ref $Data::Walk::More::containers[-1] eq 'ARRAY'; # ... Array
+     return unless ref $Data::Walk::More::containers[-2] eq 'HASH'; # ... Hash
+     return unless exists $Data::Walk::More::containers[-2]{foo}; # ... [has_keys("foo")]
+     push @matches, $_;
+ }, $data;
+
 
 =head1 SEE ALSO
 
